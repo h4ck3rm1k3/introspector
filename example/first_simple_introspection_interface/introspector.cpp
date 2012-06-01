@@ -7,82 +7,238 @@ this_is_a_int_typename this_is_a_variable_whos_type_is_quote_this_is_a_type_name
  
 this_is_a_int_typename & this_is_a_reference_to_another_variable=this_is_a_variable_whos_type_is_quote_this_is_a_type_name_endquote;
 
+
+#include <list>
+#include <string>
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+namespace libelf {
+
+#include <libelf.h>
+  // open http://pubs.opengroup.org/onlinepubs/000095399/functions/open.html
+#include <sys/stat.h>
+#include <sys/fcntl.h>
+  // from http://www.vbforums.com/showthread.php?t=556042
+
+  void readType(Elf64_Ehdr * hdr) {
+    // from http://www.hep.wisc.edu/~pinghc/Detect_the_file_type.htm
+    if(hdr!=NULL) 
+      {
+	switch(hdr->e_type)
+	  {
+	  case 1:
+	    cout<<"File Tyep: ET_REL 1 /* Relocatable file */"<<endl;
+	    break;
+	  case 2:
+	    cout<<"File TYpe: ET_EXEC 2 /* Executable file */"<<endl;
+	    break;
+	  default:
+	    cout<<"File Type: else types"<<endl;
+	  }
+	
+	switch(hdr->e_machine)
+	  {
+	  case 0:
+	    cout<<"Machine type: EM_NONE	0 /* No machine */"<<endl;
+	    break;
+	  case 1:
+	    cout<<"Machine type: EM_M32 1 /* AT&T WE 32100 */"<<endl;
+	    break;
+	  case 2:
+	    cout<<"Machine type: EM_SPARC 2 /* SUN SPARC */"<<endl;
+	    break;
+	  case 3:
+	    cout<<"Machine type: EM_386 3 /* Intel 80386 */"<<endl;
+	    break;
+	  default:
+	    cout<<"else types"<<endl;
+	  }
+      }
+    else
+      cout<<"hdr ptr points to NULL"<<endl;
+  }
+  
+  // 
+
+  bool readelf() {
+    cout << "reading elf!" << endl;
+    int fileDescriptor = open("/proc/self/exe", O_RDONLY); 
+
+    elf_version(EV_CURRENT);
+
+    Elf *elf = elf_begin(fileDescriptor, ELF_C_READ, NULL);
+
+    Elf64_Ehdr *header = 0; // ELF Header
+    Elf_Scn *section = 0; // ELF Section
+    Elf_Data *sectionData = 0; // ELF Section Data
+    Elf64_Shdr *sectionHeader = 0; // ELF Section Header
+    int symbolNumber = -1;
+    if(!elf) { 
+      cerr << "elf begin failed!" << endl;
+      goto end; 
+    }
+    else {
+      cerr << "elf" << elf << endl;
+    }
+
+    unsigned short ndx;
+    if((header = elf64_getehdr(elf)) == 0) {
+      cerr << "cannot get header!" << endl;
+      goto error;
+      //elf_end(elf);
+      //close(fileDescriptor);
+      //return false;
+    }
+
+    readType(header); // another function
+
+    ndx = header->e_shstrndx;
+    // Go through the sections
+    // .dynsym = Dynamic Symbol Location (linked with .hash and .dynstr)
+    while((section = elf_nextscn(elf, section)) != 0) {
+
+      if((sectionHeader = elf64_getshdr(section)) != 0) {
+	string name = elf_strptr(elf, ndx, (size_t)sectionHeader->sh_name);
+
+	if(name != ".dynsym") {
+	  Elf64_Shdr *strtabhdr;
+	  Elf64_Sym *symbol, *symbolp; // ELF Symbol Pointers
+	  char *string;
+	  strtabhdr = &sectionHeader[sectionHeader->sh_link];
+	  string = (char *)malloc(strtabhdr->sh_size);
+	  if(string == NULL) goto error;
+	  if((size_t)lseek(fileDescriptor, strtabhdr->sh_offset, SEEK_SET) != strtabhdr->sh_offset) goto error;
+	  if((size_t)read(fileDescriptor, string, strtabhdr->sh_size) != strtabhdr->sh_size) goto error;
+	  symbol = (Elf64_Sym *)malloc(sectionHeader->sh_size);
+	  if(symbol == NULL) goto error;
+	  if((size_t)lseek(fileDescriptor, sectionHeader->sh_offset, SEEK_SET) != sectionHeader->sh_offset) goto error;
+	  if((size_t)read(fileDescriptor, symbol, sectionHeader->sh_size) != sectionHeader->sh_size) goto error;
+	  symbolp = symbol;
+	  for(int i = 0; (size_t)i < sectionHeader->sh_size; i += sizeof(Elf64_Sym)) 
+	    {
+	      cout << i << endl;
+	    }
+	    ++symbolp;
+	  }
+
+	} else continue;
+
+    }
+    // .rel.plt = Relocation Procedure Linkage Table (Actual GOT)
+    if(symbolNumber == -1) goto error;
+    // Lookup the Hash from .dynsym in .rel.plt
+    section = 0; sectionHeader = 0;
+    while((section = elf_nextscn(elf, section)) != 0) {
+      char *name = 0;
+      if((sectionHeader = elf64_getshdr(section)) != 0) {
+	name = elf_strptr(elf, ndx, (size_t)sectionHeader->sh_name);
+	//help #	if(!strcmp(name, ".rel.plt")) 
+	{
+	  sectionData = elf_getdata(section, NULL);
+	  if(!sectionData) goto error;
+	  for(int i = 0; (size_t)i < (sectionHeader->sh_size / sectionHeader->sh_entsize); i++) {
+	    //GElf_Rel relocation;
+	    //gelf_getrel(sectionData, i, &relocation);
+	    //	    if(ELF64_R_SYM(relocation.r_info) == (size_t)symbolNumber) {
+
+	    cout <<  sectionHeader->sh_name << endl;
+	    //	    cout <<  sectionHeader.sh_type << endl;
+	    //cout <<  sectionHeader.sh_flags << endl;
+
+	      }
+	    }
+	  }
+
+
+    }
+  end:
+    close(fileDescriptor);
+    elf_end(elf);
+    return true;
+  error:
+    close(fileDescriptor);
+    elf_end(elf);
+    return false;
+  }
+  
+};
+
 namespace gcc {
-  typedef int size_t;
+  //  typedef int size_t;
+  /*
   struct string {
     void print() {};
-  };
+    };*/
+
   namespace program {    
+
+    extern const char filename[] = __FILE__;
+
+
+    void print_current_process_T(const char * Str) 
+    {
+      string S(Str);
+      S= "/proc/self/" + S;
+      ifstream inf(S);
+      cout << "Starting:"<< S << endl;
+      int ch = inf.get();
+      while (inf.good()) {
+	cout << (char) ch;
+	ch = inf.get();
+      }
+    }
+
+    void print_current_process_all() {
+      libelf::readelf();
+      // this is a dir      print_current_process_T("cwd");
+      //print_current_process_T("exe");
+      print_current_process_T("env");
+      print_current_process_T("mem");
+      print_current_process_T("status");
+      print_current_process_T("cmdline");
+      
+    }
+
     namespace variables {
       struct variable {
         struct variable_decl {
-          string name;
+	  string name;
+	  void print() {
+	    cout << name  << endl;
+	}
         };
         variable_decl decl ;
+	void print() {
+	  decl.print();
+	}
       };
-
-      struct list_base {
-        size_t size(){ return 1; };
-        bool isempty() { return false; }
-      };
-
-      struct list : public list_base {
-        bool isempty() {}
-        size_t size() {
-          if (isempty()) { return 0; }
-        }
-
-        //template <class template_list>
-        struct iterator {
-          list_base & source;
-          //          iterator ( ) {};
-          iterator (list_base  & l):source(l) 
-          { };
-          iterator operator ++ (int) {
-          }
-          bool operator < (iterator &) {
-            if (source.isempty())
-              {
-                return 0;
-              }        
-          }
-
-          bool operator < (iterator ) {
-            if (source.isempty())
-              {
-                return 0;
-              }        
-          }
-          variable * operator -> () {}
-        };
-        
-        //typedef typename iterator<typename template_list> template_list_iterator_t;
-        
-        iterator  end() {
-          
-        }
-          
-        
-      };
+      
+      typedef list<variable> t_variable_list;
+      t_variable_list list;
+      
     };
   };
-  program::variables::list list_of_variables_in_program;
 };
+
+
+void run_client_introspection () {
+
+  cout << "welcome to the introspector!" << endl;
+  gcc::program::print_current_process_all();
+
+  for (
+       gcc::program::variables::t_variable_list::iterator y=gcc::program::variables::list.begin();
+       y != gcc::program::variables::list.end();
+       y++)    {
+    y->decl.print();
+  }
+}
 
 this_is_a_int_typename this_is_what_the_program_does (int argc, char ** argv )
 {
- 
-  gcc::list_of_variables_in_program;
-  gcc::program::variables::list v;
-  for (gcc::program::variables::list::iterator y=v;y<v.end();y++)    {
-    y->decl.name.print();
-  }
-
-
-  for (gcc::program::variables::list::iterator y=v;y<v.end();y++)    {
-    y->decl.name.print();
-  }
-
+  run_client_introspection();
   bool really_simple_return=false;
 
   if (really_simple_return)

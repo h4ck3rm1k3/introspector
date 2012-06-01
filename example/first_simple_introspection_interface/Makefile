@@ -1,7 +1,9 @@
 all : test
 
+
+
 introspector : introspector.cpp
-	gcc introspector.cpp -o ./introspector
+	g++ -lelf -std=gnu++0x introspector.cpp -o ./introspector
 
 test : introspector
 	./introspector
