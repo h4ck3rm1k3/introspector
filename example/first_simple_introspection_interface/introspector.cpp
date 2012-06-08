@@ -1,3 +1,7 @@
+/*
+ * Subject to the GPL, v.2
+ */
+
 typedef int an_integer_is_also_a_basic_type_a_grounding;
 typedef an_integer_is_also_a_basic_type_a_grounding this_is_a_type;
 typedef this_is_a_type this_is_another_typedef_body;
@@ -7,14 +11,20 @@ this_is_a_int_typename this_is_a_variable_whos_type_is_quote_this_is_a_type_name
  
 this_is_a_int_typename & this_is_a_reference_to_another_variable=this_is_a_variable_whos_type_is_quote_this_is_a_type_name_endquote;
 
-
+#include "gettext.h"
+#include <cstring>
 #include <list>
 #include <string>
 #include <iostream>
 #include <fstream>
-using namespace std;
+#include <utility>
+#include <set>
+#include <map>
+#include <vector>
+#include <algorithm>
 
-namespace libelf {
+#include <elfcpp/elfcpp.h>
+#include <elfcpp/elfcpp_file.h>
 
 #include <libelf.h>
   // open http://pubs.opengroup.org/onlinepubs/000095399/functions/open.html
@@ -22,6 +32,10 @@ namespace libelf {
 #include <sys/fcntl.h>
   // from http://www.vbforums.com/showthread.php?t=556042
 
+using namespace std;
+
+namespace libelf {
+ 
   void readType(Elf64_Ehdr * hdr) {
     // from http://www.hep.wisc.edu/~pinghc/Detect_the_file_type.htm
     if(hdr!=NULL) 
@@ -60,8 +74,43 @@ namespace libelf {
       cout<<"hdr ptr points to NULL"<<endl;
   }
   
-  // 
+  // from linux kernel linux/linux/arch/x86/vdso/vma.c
+  
+  void check_vdso64(Elf64_Ehdr *hdr)
+  {
+    Elf64_Shdr *sechdrs, *alt_sec = 0;
+    char *secstrings;
+    int i;
+    
+    cout << "Check hdr " << hdr << "\n";
+    cout << "Check hdr e_shoff " << hdr->e_shoff << "\n";
 
+    Elf64_Shdr *  shdr0 = (Elf64_Shdr *) (hdr->e_shoff + (void*)hdr);
+    cout << "Check hdr + e_shoff " << shdr0 << "\n";
+    cout << "Check  hdr->e_shstrndx " << hdr->e_shstrndx << "\n";
+
+    // crash cout << "check" << hdr + shdr0[0].sh_offset;
+   
+    // const char * name_table = (const char *) hdr + shdr0[hdr->e_shstrndx].sh_offset;
+    //cout << "Check  name_table " << name_table << "\n";
+
+
+    //Elf_Shdr const *const symsec = &shdr0[symsec_sh_link];
+    //    Elf_Shdr const *const strsec = &shdr0[w(symsec->sh_link)];
+
+    //segfault    secstrings = (char *)(hdr + sechdrs[hdr->e_shstrndx].sh_offset);
+    //cout << "Check hdr secstrings " << secstrings << "\t";
+
+    for (i = 1; i < hdr->e_shnum; i++) {
+      //Elf64_Shdr *shdr = &sechdrs[i];
+      //cout << "Check vdo " << secstrings + shdr->sh_name << "\t";
+      //alt_sec = shdr;
+      //cout << hdr + shdr->sh_offset << "\t";
+      //      cout << alt_sec->sh_size << endl;
+      
+    }
+  }
+  
   bool readelf() {
     cout << "reading elf!" << endl;
     int fileDescriptor = open("/proc/self/exe", O_RDONLY); 
@@ -69,6 +118,7 @@ namespace libelf {
     elf_version(EV_CURRENT);
 
     Elf *elf = elf_begin(fileDescriptor, ELF_C_READ, NULL);
+    cout << "read elf" << elf << endl;
 
     Elf64_Ehdr *header = 0; // ELF Header
     Elf_Scn *section = 0; // ELF Section
@@ -92,6 +142,8 @@ namespace libelf {
       //return false;
     }
 
+    cout << "check_vdso64" << endl;
+    check_vdso64(header); // another function
     readType(header); // another function
 
     ndx = header->e_shstrndx;
@@ -101,27 +153,40 @@ namespace libelf {
 
       if((sectionHeader = elf64_getshdr(section)) != 0) {
 	string name = elf_strptr(elf, ndx, (size_t)sectionHeader->sh_name);
+	cout << "section name :" << name << endl;
 
+
+	// 
 	if(name != ".dynsym") {
 	  Elf64_Shdr *strtabhdr;
 	  Elf64_Sym *symbol, *symbolp; // ELF Symbol Pointers
-	  char *string;
+	  char *astring;
 	  strtabhdr = &sectionHeader[sectionHeader->sh_link];
-	  string = (char *)malloc(strtabhdr->sh_size);
-	  if(string == NULL) goto error;
+	  astring = (char *)malloc(strtabhdr->sh_size);
+	  if(astring == NULL) goto error;
 	  if((size_t)lseek(fileDescriptor, strtabhdr->sh_offset, SEEK_SET) != strtabhdr->sh_offset) goto error;
-	  if((size_t)read(fileDescriptor, string, strtabhdr->sh_size) != strtabhdr->sh_size) goto error;
+	  if((size_t)read(fileDescriptor, astring, strtabhdr->sh_size) != strtabhdr->sh_size) goto error;
 	  symbol = (Elf64_Sym *)malloc(sectionHeader->sh_size);
 	  if(symbol == NULL) goto error;
 	  if((size_t)lseek(fileDescriptor, sectionHeader->sh_offset, SEEK_SET) != sectionHeader->sh_offset) goto error;
 	  if((size_t)read(fileDescriptor, symbol, sectionHeader->sh_size) != sectionHeader->sh_size) goto error;
+
 	  symbolp = symbol;
 	  for(int i = 0; (size_t)i < sectionHeader->sh_size; i += sizeof(Elf64_Sym)) 
 	    {
-	      cout << i << endl;
+	      const char * s=elf_strptr(elf, sectionHeader->sh_link, symbolp->st_name);
+	      if (s){
+		string name(s);	      
+		cout << name << "\t"<< i << endl;
+	      }
+	      else
+		{
+		  cout << "NULL name" << "\t"<< i << endl;
+		}
+	      ++symbolp;
 	    }
-	    ++symbolp;
-	  }
+
+	} // dynsym
 
 	} else continue;
 
@@ -134,6 +199,9 @@ namespace libelf {
       char *name = 0;
       if((sectionHeader = elf64_getshdr(section)) != 0) {
 	name = elf_strptr(elf, ndx, (size_t)sectionHeader->sh_name);
+
+	cout << "section name :" << name << endl;
+
 	//help #	if(!strcmp(name, ".rel.plt")) 
 	{
 	  sectionData = elf_getdata(section, NULL);

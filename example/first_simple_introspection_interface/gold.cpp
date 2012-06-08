@@ -40,6 +40,7 @@ using namespace std;
 
 int main (int argc, char ** argv )
 {
+  gold::parameters_clear_target();
 
     //    gold::Object::View v (hdr);
     //    elfcpp::Elf_file<64, false, gold::Object> test(&v);
@@ -56,6 +57,12 @@ int main (int argc, char ** argv )
 
     struct stat st;
     const char * program_name="/proc/self/exe";
+    gold::Errors errors(program_name);
+    gold::set_parameters_errors(&errors);
+
+    gold::General_options options;
+    gold::set_parameters_options(&options);
+
     ::stat(program_name, &st);
     int o = ::open(program_name, O_RDONLY);
     unsigned char* filedata = new unsigned char[st.st_size];
