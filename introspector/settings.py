@@ -25,7 +25,7 @@ SECRET_KEY = 'e+k)v61hnyqk0^6l3z(5!(lxn^*pdrhgt_+fwv1yas%36-5_ng'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 'www.basementdweller.club' ]
 
 
 # Application definition

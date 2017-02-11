@@ -9,4 +9,4 @@ pyparsing==2.1.10
 pytz==2016.10
 rdflib==4.2.1
 six==1.10.0
-celery
+#celery
