@@ -1,0 +1,9 @@
+appdirs==1.4.0
+Django==2.0.dev20170119100041
+isodate==0.5.4
+packaging==16.8
+ply==3.10
+pyparsing==2.1.10
+pytz==2016.10
+rdflib==4.2.1
+six==1.10.0

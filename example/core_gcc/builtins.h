@@ -18,4 +18,6 @@ void describe__exit(int status) {
   const char header[] = "unistd.h";
   parameter_range(&status,&EXIT_FAILURE,"Failing exit status.");
   parameter_range(&status,&EXIT_SUCCESS,"Successful exit status");
+  const char website[] = "http://pubs.opengroup.org/onlinepubs/009695399/functions/exit.html";
+  
 }
