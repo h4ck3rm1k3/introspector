@@ -1,5 +1,4 @@
 appdirs==1.4.0
-Django==2.0.dev20170119100041
 git+https://github.com/django-nonrel/django@nonrel-1.6
 git+https://github.com/django-nonrel/djangotoolbox
 git+https://github.com/django-nonrel/mongodb-engine
