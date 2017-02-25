@@ -218,3 +218,69 @@ def func_decls2(r, fid, nodeid):
         else:
             d['nodes'].append(d1)
         return render(r,'funcdecl.jinja',{'obj':  d  })    
+from django.db.models import Count
+from django.db.models import Q
+
+def types(r):
+    return
+    # d={
+    #     'fields':{},
+    #     'types':{},
+    #     'types2':{}
+    # }
+    # d2={
+    #     'types2':{}
+    # }
+    # for f in gcc_tu_parser.models.Node.MyMeta.ref_fields:
+    #     d['fields'][f]=1
+    # types = gcc_tu_parser.models.Node.objects.values('node_type').annotate(Count('node_type'))
+    # for t in types:
+    #     nt = t['node_type']
+    #     nc = t['node_type__count']
+    #     if nt.endswith('_type'):
+    #         d['types'][nt]=nc
+
+    # for t in d['types']:
+    #     # for
+    #     d2['types2'][t]={}
+    #     for f in gcc_tu_parser.models.Node.MyMeta.ref_fields:
+    #         #d2['types2'][t][f]=0
+            
+    #         fc = gcc_tu_parser.models.Node.objects.exclude(
+    #             **{
+    #                 #'{0}__{1}'.format(f, 'isblank'): True
+    #                 '{0}'.format(f): ''
+    #         }).filter(
+    #             **{
+    #                 '{0}'.format('node_type'): t,
+    #             }
+    #         ).values('node_type').annotate(Count('node_type'))
+    #         for x in fc:
+    #             nt = x['node_type']
+    #             nc = x['node_type__count']
+    #             if nc > 0 :
+    #                 d2['types2'][t][f]=nc
+                
+    # return render(r,'types.jinja',{'obj':  d2  })    
+
+def types2(r):
+
+    d2={
+        'fields':{},
+    #     'types':{}
+    }
+    for f in gcc_tu_parser.models.Node.MyMeta.ref_fields2.keys():
+        f2= gcc_tu_parser.models.Node.MyMeta.ref_fields2[f]
+        d2['fields'][f]={}
+        
+        types = gcc_tu_parser.models.Node.objects.values('node_type').annotate(Count('%s__node_type' % f))
+        for t in types:
+            #for f in t:
+            #    d2[f]=1
+            nt = t['node_type']
+            nc = t['%s__node_type__count' %f]
+            d2['fields'][f][nt]=nc
+                
+    return render(r,'types.jinja',{'obj':  d2  })    
+
+
