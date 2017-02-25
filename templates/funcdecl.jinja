@@ -1,0 +1,77 @@
+<h1>Function Decl</h1>
+{% set order= [ 'o' ,'name','type',
+                'ret_type',
+                'args','body',] %}
+{% set lookup={
+    'o' : 'Object',
+    'name':'Name',
+    'type':'Type',
+    'ret_type':'Return Type',
+    'type_params_list':'Param Types',
+    'args':'Args',
+    'body':'Body'
+}
+ %}
+
+{% set order2= [
+   'source_file_id',
+   'node_id',
+   'node_type',
+   'attrs_string',
+   'refs_chain',
+   'refs_mngl',
+   'refs_name',
+   'refs_scpe',
+   'refs_type',
+
+   'refs_retn',
+   'refs_size',
+   'refs_prms',
+    'name',
+] %}
+
+{% set skip= [   'attrs_addr',   'id',] %}
+
+
+{% for x in obj.nodes %}
+   {% for f in order %}
+   <!--begin {{f}}-->
+   {% if x[f] %}
+      {% set curr= x[f] %}
+       <h2>{{f}}-{{lookup[f]}}</h2>
+       <table border=1>
+       <tr>{% for f2 in order2 %}{% if f2 in curr %}
+<th>{{f2}}</th>{% endif %}{% endfor%}
+</tr>
+<tr>{% for f2 in order2 %}{% if f2 in curr %}<td>{{curr[f2]}}</td>{% endif %}{% endfor %}</tr>
+       </table>
+  {% endif %}
+  <!--if field {{f}} was set-->
+{% endfor%}
+<!--end for field-->
+
+<!--
+The parameter list breaks the mold
+-->
+<h3>param list</h3>
+   {% set f= 'type_params_list' %}
+   {% if x[f] %}
+   {% set curr= x[f] %}  
+   <h2>{{f}}-{{lookup[f]}}</h2>
+   
+   <table border=1>
+   <tr>
+   <th>pos</th>
+   <th>obj</th>
+   </tr>header
+   {% for f2 in curr %}
+      <tr>
+         <td>{{f2}}</td>
+	    </tr> 
+   {% endfor%}
+
+   </table>
+   {% endif %}   
+
+{% endfor%}
+<!--each object-->

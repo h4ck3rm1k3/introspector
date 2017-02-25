@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gcc_tu_parser',
+    'django_jinja',
 ]
 
 MIDDLEWARE = [
@@ -53,10 +54,12 @@ ROOT_URLCONF = 'introspector.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        #'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND': "django_jinja.backend.Jinja2",
+        'DIRS': [ 'templates' ],
         'APP_DIRS': True,
         'OPTIONS': {
+             "match_extension": ".jinja",
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -120,3 +123,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 
+TEMPLATE_DIRS = ['templates']

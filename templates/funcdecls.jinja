@@ -1,0 +1,47 @@
+<h1>Function Decl</h1>
+{% set order= [ 'o' ,'name','type',
+                'ret_type',
+                'args','body',] %}
+{% set lookup={
+    'o' : 'Object',
+    'name':'Name',
+    'type':'Type',
+    'ret_type':'Return Type',
+    'type_params_list':'Param Types',
+    'args':'Args',
+    'body':'Body'
+}
+ %}
+
+{% set order2= [
+
+   'node_id',
+   'attrs_string',
+    'name',
+] %}
+
+{% set skip= [   'attrs_addr',   'id',] %}
+
+       <table border=1>
+       <tr>
+       <th>obj</th>
+       <th>node_id</th>
+       <th>attrs_string</th>
+</tr>
+
+{% for x in objs.nodes %}
+<tr>
+   {% for f in order %}
+   <!--begin {{f}}-->
+   {% if x[f] %}
+      {% set curr= x[f] %}
+{% for f2 in order2 %}{% if f2 in curr %}<td>{{curr[f2]}}</td>{% endif %}{% endfor %}
+
+  {% endif %}
+  <!--if field {{f}} was set-->
+{% endfor%}
+</tr>
+       
+{% endfor%}
+<!--each object-->
+</table>

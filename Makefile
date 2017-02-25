@@ -13,4 +13,4 @@ migrate:
 # 0003_auto_20170222_1009
 
 test:
-	python ./manage.py runserver --settings=introspector.settings.development
+	PYTHONPATH=~/experiments/gcc_py_introspector/ python3 ./manage.py runserver --settings=introspector.settings.development

@@ -2,6 +2,8 @@ import django
 from django.db import models
 
     
+#from compositefk.fields import CompositeForeignKey, RawFieldValue, LocalFieldValue, CompositeOneToOneField
+
 class SourceFile(models.Model):
     filename = models.CharField(max_length=228)
     
@@ -15,7 +17,7 @@ class Node(models.Model):
     
     class Meta:
         unique_together = (('source_file', 'node_id'),)
-        
+
     refs_argt = models.IntegerField(null=True, blank=True)
     refs_prms = models.IntegerField(null=True, blank=True)
     attrs_string = models.CharField(max_length=228)
@@ -63,3 +65,9 @@ class Node(models.Model):
     refs_decl = models.IntegerField(null=True, blank=True)
     refs_labl = models.IntegerField(null=True, blank=True)
     attrs_type = models.CharField(max_length=21)
+
+#class FuncDecl(Node):
+#    body = CompositeForeignKey(Node, on_delete=models.SET_NULL, to_fields={
+#        "source_file": "source_file",
+#        "node_id": LocalFieldValue("refs_argt"),
+#    })
