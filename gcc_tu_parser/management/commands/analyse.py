@@ -28,6 +28,8 @@ class Command:
                     '%s__node_type' % field : to_type
                     
                 })
+
+            queue = []
             
             for t in types:
                 #pprint.pprint(t.__dict__)
@@ -37,13 +39,14 @@ class Command:
                 fid2 = gcc_tu_parser.models.SourceFile(fid)
                 
                 pos = 0
-                print ("First %s %s %s" % (fromid, pos, nextid))
+                #print ("First %s %s %s" % (fromid, pos, nextid))
                 n = gcc_tu_parser.models.FuncParams(
                     source_file=fid2,
                     function_decl=fromid,
                     param_pos=pos,
                     function_param=nextid)
-                n.save()
+                #n.save()
+                queue.append(n)
                 while nextid is not None:
                     pos = pos + 1
                     types = gcc_tu_parser.models.Node.objects.filter(
@@ -57,14 +60,20 @@ class Command:
                         nextid = t.refs_chan
                         if nextid :
                             
-                            print ("next %s %s %s" % (fromid, pos, nextid))
+                            #print ("next %s %s %s" % (fromid, pos, nextid))
                             
                             n = gcc_tu_parser.models.FuncParams(
                                 source_file=fid2,
                                 function_decl=fromid,
                                 param_pos=pos,
                                 function_param=nextid)
-                            n.save()
+                            #n.save()
+                            queue.append(n)
                     else:
                         nextid = None
-                    
+                if len(queue) > 10000:
+                    print ("Creating!")
+                    gcc_tu_parser.models.FuncParams.objects.bulk_create(queue)
+                    queue = []
+                     
+            gcc_tu_parser.models.FuncParams.objects.bulk_create(queue)

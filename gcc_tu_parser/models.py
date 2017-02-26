@@ -508,3 +508,5 @@ class FuncParams(models.Model):
         'source_file':'source_file',
         'node_id':'function_param',
         })
+    class Meta:
+        unique_together = ('source_file', 'function_param','param_pos','function_param')
