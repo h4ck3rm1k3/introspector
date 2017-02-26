@@ -14,3 +14,7 @@ migrate:
 
 test:
 	PYTHONPATH=~/experiments/gcc_py_introspector/ python3 ./manage.py runserver --settings=introspector.settings.development
+
+collect:
+	python3 ./manage.py bower install --settings=introspector.settings.development 
+	python3 ./manage.py  collectstatic --settings=introspector.settings.development

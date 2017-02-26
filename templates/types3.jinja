@@ -5,34 +5,21 @@
     <script type="text/javascript" src='{{ static('tablesorter/dist/js/jquery.tablesorter.js') }}'></script>
   </head>
   <body>
-
-<table borders=1 id="myTable" class="tablesorter" >
-  <thead>
-    <tr>
-      <th>type</th>
-      <th>f</th>
-      <th>type2</th>
-      <th>count</th>
-    </tr>
-    </thead>
-<tbody>
-{%for t in obj['fields'] %}
-
-{%for f in obj['fields'][t] %}
-
-{%for f2 in obj['fields'][t][f] %}
-<tr>
-<td>{{t}}</td>
-<td>{{f}}</td>
-<td>{{f2}}</td>
-<td>{{obj['fields'][t][f][f2]}}</td>
-</tr>
-{%endfor%}
-{%endfor%}
-{%endfor%}
-</tbody>
-</table>
-
+    <table borders=1 id="myTable" class="tablesorter">
+      <thead>
+	<tr>
+	  <th>Field</th>
+	</tr>
+      </thead>
+      <tbody>
+	{%for t in obj['fields'] %}
+	<tr>
+	  <td>{{t}}</td>
+	</tr>
+	{%endfor%}
+      </tbody>
+    </table>
+    
     <script>
       $(document).ready(function() 
       { 
@@ -40,6 +27,6 @@
       } 
       ); 
     </script>
-
+    
   </body>
 </html>

@@ -297,3 +297,15 @@ def types2(r):
     return render(r,'types.jinja',{'obj':  d2  })    
 
 
+def types3(r):
+
+    d2={
+        'fields':{},
+    }
+    for f in gcc_tu_parser.models.Node.MyMeta.ref_fields2.keys():
+        f2= gcc_tu_parser.models.Node.MyMeta.ref_fields2[f]
+        d2['fields'][f]={}
+                        
+    return render(r,'types3.jinja',{'obj':  d2  })    
+
+

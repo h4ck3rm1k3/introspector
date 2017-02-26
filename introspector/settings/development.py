@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gcc_tu_parser',
     'django_jinja',
+    'djangobower',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,22 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 
 TEMPLATE_DIRS = ['templates']
+
+STATICFILES_FINDERS = [
+'djangobower.finders.BowerFinder',
+]
+
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
+
+BOWER_COMPONENTS_ROOT = PROJECT_PATH + '/components/'
+print(BOWER_COMPONENTS_ROOT)
+
+
+BOWER_INSTALLED_APPS = (
+    'jquery#1.9',
+    'underscore',
+    'jquery.tablesorter',
+    'pivottable',
+#    'd3#4.6.0',
+    'c3',
+)

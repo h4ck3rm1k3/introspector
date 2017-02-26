@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^func_decls/(\d+)$',gcc_tu_parser.views.func_decls,name='func_decls'),
     url(r'^types$',gcc_tu_parser.views.types,name='types'),
     url(r'^types2$',gcc_tu_parser.views.types2,name='types2'),
+    url(r'^types3$',gcc_tu_parser.views.types3,name='types3'),
     url(r'^func_decls/(\d+)/(\d+)$',gcc_tu_parser.views.func_decls2,name='func_decls'),
 ]
 
