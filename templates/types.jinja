@@ -1,21 +1,24 @@
-#
-{{obj}}
+
+<table borders=1>
+<tr>
+<th>type</th>
+<th>f</th>
+<th>type2</th>
+<th>count</th>
+</tr>
 
 {%for t in obj['fields'] %}
-<h1>{{t}}</h1>
-
-{{obj['fields'][t]}}
 
 {%for f in obj['fields'][t] %}
-<h2>{{f}}</h2>
 
-{{obj['fields'][t][f]}}
-
+{%for f2 in obj['fields'][t][f] %}
+<tr>
+<td>{{t}}</td>
+<td>{{f}}</td>
+<td>{{f2}}</td>
+<td>{{obj['fields'][t][f][f2]}}</td>
+</tr>
 {%endfor%}
-
 {%endfor%}
-
-<h1>data</h1>
-{%for t in obj['data'] %}
-<pre>{{t}}</pre>
 {%endfor%}
+</table>
