@@ -267,19 +267,32 @@ def types2(r):
 
     d2={
         'fields':{},
-    #     'types':{}
+        'types':{},
+        'data':[]
     }
     for f in gcc_tu_parser.models.Node.MyMeta.ref_fields2.keys():
         f2= gcc_tu_parser.models.Node.MyMeta.ref_fields2[f]
-        d2['fields'][f]={}
+        #d2['fields'][f]={}
         
-        types = gcc_tu_parser.models.Node.objects.values('node_type').annotate(Count('%s__node_type' % f))
+        types = gcc_tu_parser.models.Node.objects.values(
+            'node_type',
+            '%s__node_type' % f).annotate(Count('%s__node_type' % f))
         for t in types:
             #for f in t:
-            #    d2[f]=1
-            nt = t['node_type']
+            #    d2['types'][f]=1
+            nt1 = t['node_type']
+            nt = t['%s__node_type' %f]
             nc = t['%s__node_type__count' %f]
-            d2['fields'][f][nt]=nc
+            if nt1 not in d2['fields']:
+                d2['fields'][nt1]={
+                    f:{nt:nc}
+                }
+            else:
+                if f not in d2['fields'][nt1]:
+                    d2['fields'][nt1][f]={nt:nc}
+                else:
+                    d2['fields'][nt1][f][nt]=nc
+            #d2['data'].append(t)
                 
     return render(r,'types.jinja',{'obj':  d2  })    
 

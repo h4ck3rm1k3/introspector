@@ -1,2 +1,21 @@
 #
 {{obj}}
+
+{%for t in obj['fields'] %}
+<h1>{{t}}</h1>
+
+{{obj['fields'][t]}}
+
+{%for f in obj['fields'][t] %}
+<h2>{{f}}</h2>
+
+{{obj['fields'][t][f]}}
+
+{%endfor%}
+
+{%endfor%}
+
+<h1>data</h1>
+{%for t in obj['data'] %}
+<pre>{{t}}</pre>
+{%endfor%}
