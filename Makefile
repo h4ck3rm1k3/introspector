@@ -18,3 +18,9 @@ test:
 collect:
 	python3 ./manage.py bower install --settings=introspector.settings.development 
 	python3 ./manage.py  collectstatic --settings=introspector.settings.development
+
+analyze:
+	python3 ./manage.py analyse --settings=introspector.settings.development color function_type prms tree_list function_params
+
+dbshell:
+	python3 ./manage.py dbshell --settings=introspector.settings.development 

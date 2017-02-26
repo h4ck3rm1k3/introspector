@@ -204,281 +204,307 @@ class Node(models.Model):
     #                             }
     # )
     E = CompositeForeignKey('self',
-        related_name='E_set',
-        on_delete=models.SET_NULL,
-        to_fields={
-        'source_file':'source_file',
-        'node_id':'refs_E',
+                            related_name='E_set',
+                            default='',
+                            on_delete=models.SET_NULL,
+                            to_fields={
+                                'source_file':'source_file',
+                                'node_id':'refs_E',
         })
     OP0 = CompositeForeignKey('self',
         related_name='OP0_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_OP0',
         })
     OP1 = CompositeForeignKey('self',
         related_name='OP1_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_OP1',
         })
     OP2 = CompositeForeignKey('self',
         related_name='OP2_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_OP2',
         })
     args = CompositeForeignKey('self',
         related_name='args_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_args',
         })
     argt = CompositeForeignKey('self',
         related_name='argt_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_argt',
         })
     body = CompositeForeignKey('self',
         related_name='body_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_body',
         })
     bpos = CompositeForeignKey('self',
         related_name='bpos_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_bpos',
         })
     chain = CompositeForeignKey('self',
         related_name='chain_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_chain',
         })
     chan = CompositeForeignKey('self',
         related_name='chan_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_chan',
         })
     cnst = CompositeForeignKey('self',
         related_name='cnst_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_cnst',
         })
     cond = CompositeForeignKey('self',
         related_name='cond_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_cond',
         })
     csts = CompositeForeignKey('self',
         related_name='csts_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_csts',
         })
     decl = CompositeForeignKey('self',
         related_name='decl_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_decl',
         })
     domn = CompositeForeignKey('self',
         related_name='domn_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_domn',
         })
     elts = CompositeForeignKey('self',
         related_name='elts_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_elts',
         })
     expr = CompositeForeignKey('self',
         related_name='expr_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_expr',
         })
     flds = CompositeForeignKey('self',
         related_name='flds_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_flds',
         })
     fn = CompositeForeignKey('self',
         related_name='fn_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_fn',
         })
     idx = CompositeForeignKey('self',
         related_name='idx_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_idx',
         })
     init = CompositeForeignKey('self',
         related_name='init_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_init',
         })
     labl = CompositeForeignKey('self',
         related_name='labl_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_labl',
         })
     low = CompositeForeignKey('self',
         related_name='low_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_low',
         })
     fmax = CompositeForeignKey('self',
         related_name='max_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_max',
         })
     fmin = CompositeForeignKey('self',
         related_name='min_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_min',
         })
     mngl = CompositeForeignKey('self',
         related_name='mngl_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_mngl',
         })
     name = CompositeForeignKey('self',
         related_name='name_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_name',
         })
     prms = CompositeForeignKey('self',
         related_name='prms_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_prms',
         })
     ptd = CompositeForeignKey('self',
         related_name='ptd_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_ptd',
         })
     purp = CompositeForeignKey('self',
         related_name='purp_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_purp',
         })
     refd = CompositeForeignKey('self',
         related_name='refd_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_refd',
         })
     retn = CompositeForeignKey('self',
         related_name='retn_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_retn',
         })
     scpe = CompositeForeignKey('self',
         related_name='scpe_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_scpe',
         })
     size = CompositeForeignKey('self',
         related_name='size_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_size',
         })
     ftype = CompositeForeignKey('self',
         related_name='type_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_type',
         })
     unql = CompositeForeignKey('self',
         related_name='unql_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_unql',
         })
     val = CompositeForeignKey('self',
         related_name='val_set',
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_val',
         })
     valu = CompositeForeignKey('self',
-        related_name='valu_set',
-        on_delete=models.SET_NULL,
-        to_fields={
-        'source_file':'source_file',
-        'node_id':'refs_valu',
-        })
+                               related_name='valu_set',
+                               #db_column='refs_valu',
+                               on_delete=models.SET_NULL,
+                               default='',
+                               to_fields={
+                                   'source_file':'source_file',
+                                   'node_id':'refs_valu',
+                               })
     fvars = CompositeForeignKey('self',
         related_name='vars_set',
         on_delete=models.SET_NULL,
+                                default='',
+                                #db_column='refs_vars'             ,
         to_fields={
         'source_file':'source_file',
         'node_id':'refs_vars',
         })
-#class FuncDecl(Node):
-#    body = CompositeForeignKey(Node, on_delete=models.SET_NULL, to_fields={
-#        "source_file": "source_file",
-#        "node_id": LocalFieldValue("refs_argt"),
-#    })
 
+
+class FuncParams(models.Model):
+    source_file= models.ForeignKey(SourceFile,
+                                   blank=True,
+                                   null=True,
+                                   #db_column='source_file_n',
+                                   on_delete=models.SET_NULL)
+    function_decl  = models.IntegerField(null=False)
+    #source_file_num  = models.IntegerField(null=False)
+    param_pos  = models.IntegerField(null=False)
+    function_param = models.IntegerField(null=False)
+    function = CompositeForeignKey('Node',
+                                   related_name='func_param_header',
+                                   on_delete=models.SET_NULL,
+                                   default='',
+                                   to_fields={
+                                       'source_file':'source_file',
+                                       'node_id':'function_decl',
+                                })
+    parameters = CompositeForeignKey('Node',
+        related_name='func_params',
+        on_delete=models.SET_NULL,        default='',
+        to_fields={
+        'source_file':'source_file',
+        'node_id':'function_param',
+        })

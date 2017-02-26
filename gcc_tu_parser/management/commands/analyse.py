@@ -34,11 +34,12 @@ class Command:
                 fromid = t.__dict__['node_id']
                 nextid = t.__dict__[f2]
                 fid = t.__dict__['source_file_id']                
+                fid2 = gcc_tu_parser.models.SourceFile(fid)
                 
                 pos = 0
                 print ("First %s %s %s" % (fromid, pos, nextid))
                 n = gcc_tu_parser.models.FuncParams(
-                    source_file_id=fid,
+                    source_file=fid2,
                     function_decl=fromid,
                     param_pos=pos,
                     function_param=nextid)
@@ -59,7 +60,7 @@ class Command:
                             print ("next %s %s %s" % (fromid, pos, nextid))
                             
                             n = gcc_tu_parser.models.FuncParams(
-                                source_file=fid,
+                                source_file=fid2,
                                 function_decl=fromid,
                                 param_pos=pos,
                                 function_param=nextid)

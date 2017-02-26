@@ -10,8 +10,13 @@ import json
 from gcc_tu_parser.models import SourceFile,Node
 import gcc_tu_parser.models
 import pprint
-
+from django.db.models import Count
+from django.db.models import Q
+import gcc_tu_parser.models
 from django.http import HttpResponse
+from gcc_tu_parser.models import SourceFile,Node
+import gcc_tu_parser.loadpickle
+
 def files(r):
     files ={}
     file_obj= SourceFile.objects.all()
@@ -20,15 +25,12 @@ def files(r):
                 
     return HttpResponse(json.dumps(files))
 
-import gcc_tu_parser.loadpickle
 def picklefile(r,f):
     d ={
         'file':f,
         'filename': SourceFile.objects.get(id=f).filename
     }
     return HttpResponse(json.dumps(        d    ))
-from gcc_tu_parser.models import SourceFile,Node
-import gcc_tu_parser.models
     
 def file_nodetype(r, fid, ntype):
     #print (fid,ntype)
@@ -218,8 +220,6 @@ def func_decls2(r, fid, nodeid):
         else:
             d['nodes'].append(d1)
         return render(r,'funcdecl.jinja',{'obj':  d  })    
-from django.db.models import Count
-from django.db.models import Q
 
 def types(r):
     return
@@ -239,13 +239,11 @@ def types(r):
     #     nc = t['node_type__count']
     #     if nt.endswith('_type'):
     #         d['types'][nt]=nc
-
     # for t in d['types']:
     #     # for
     #     d2['types2'][t]={}
     #     for f in gcc_tu_parser.models.Node.MyMeta.ref_fields:
-    #         #d2['types2'][t][f]=0
-            
+    #         #d2['types2'][t][f]=0            
     #         fc = gcc_tu_parser.models.Node.objects.exclude(
     #             **{
     #                 #'{0}__{1}'.format(f, 'isblank'): True
@@ -259,8 +257,7 @@ def types(r):
     #             nt = x['node_type']
     #             nc = x['node_type__count']
     #             if nc > 0 :
-    #                 d2['types2'][t][f]=nc
-                
+    #                 d2['types2'][t][f]=nc                
     # return render(r,'types.jinja',{'obj':  d2  })    
 
 def types2(r):
@@ -295,7 +292,6 @@ def types2(r):
             #d2['data'].append(t)
                 
     return render(r,'types.jinja',{'obj':  d2  })    
-
 
 def types3(r):
 
