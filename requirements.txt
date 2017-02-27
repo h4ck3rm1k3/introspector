@@ -12,10 +12,10 @@ six==1.10.0
 #celery
 #Django==2.0.dev20170119100041
 django-bower==5.2.0
-django-composite-foreignkey==1.0.0a10
+#django-composite-foreignkey==1.0.0a10
 django-jinja==2.2.2
-
-
+#git@github.com:h4ck3rm1k3/django-composite-foreignkey.git
+git+https://github.com/h4ck3rm1k3/django-composite-foreignkey@patch-1
 
 # argcomplete==1.4.1
 # argh==0.26.2
