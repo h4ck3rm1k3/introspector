@@ -19,27 +19,26 @@ class Command:
         from_type = argv[4]
         field = argv[5]
         to_type = argv[6]
+        to_table = argv[7]
+        
         if operation == 'color':
             f2= gcc_tu_parser.models.Node.MyMeta.ref_fields2[field]
 
             types = gcc_tu_parser.models.Node.objects.filter(
                 **{
                     'node_type' : from_type,
-                    '%s__node_type' % field : to_type
-                    
+                    '%s__node_type' % field : to_type                    
                 })
 
             queue = []
             
             for t in types:
-                #pprint.pprint(t.__dict__)
                 fromid = t.__dict__['node_id']
                 nextid = t.__dict__[f2]
                 fid = t.__dict__['source_file_id']                
                 fid2 = gcc_tu_parser.models.SourceFile(fid)
                 
                 pos = 0
-                #print ("First %s %s %s" % (fromid, pos, nextid))
                 n = gcc_tu_parser.models.FuncParams(
                     source_file=fid2,
                     function_decl=fromid,
