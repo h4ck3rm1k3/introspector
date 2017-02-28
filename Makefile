@@ -14,7 +14,7 @@ migrate:
 # 0003_auto_20170222_1009
 
 test:
-	PYTHONPATH=~/experiments/gcc_py_introspector/ python3 ./manage.py runserver --settings=introspector.settings.development
+	PYTHONPATH=~/experiments/gcc_py_introspector/ python3 ./manage.py runserver --settings=introspector.settings.development 0.0.0.0:8000
 
 collect:
 	python3 ./manage.py bower install --settings=introspector.settings.development 
@@ -30,3 +30,11 @@ analyze2:
 
 dbshell:
 	python3 ./manage.py dbshell --settings=introspector.settings.development 
+
+
+getdata:
+	wget https://archive.org/download/dbdump.sql/dbdump.sql.bz2
+	bunzip2 dbdump.sql.bz2
+	mv introspector/db.sqlite3 introspector/db.sqlite3.old
+	sqlite3 introspector/db.sqlite3 --init dbdump.sql
+
