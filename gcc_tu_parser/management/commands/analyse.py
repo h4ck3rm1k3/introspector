@@ -20,6 +20,8 @@ class Command:
         field = argv[5]
         to_type = argv[6]
         to_table = argv[7]
+
+        mdl = gcc_tu_parser.models.NamedList,
         
         if operation == 'color':
             f2= gcc_tu_parser.models.Node.MyMeta.ref_fields2[field]
@@ -39,11 +41,12 @@ class Command:
                 fid2 = gcc_tu_parser.models.SourceFile(fid)
                 
                 pos = 0
-                n = gcc_tu_parser.models.FuncParams(
+                n = mdl(
                     source_file=fid2,
-                    function_decl=fromid,
-                    param_pos=pos,
-                    function_param=nextid)
+                    starting_node=fromid,
+                    item_pos=pos,
+                    node_type=to_table,
+                    value=nextid)
                 #n.save()
                 queue.append(n)
                 while nextid is not None:
@@ -51,21 +54,19 @@ class Command:
                     types = gcc_tu_parser.models.Node.objects.filter(
                         **{
                             'node_id' : nextid,
-                            #'refs_chan' : f2                        
                         })
                     t = types.first()
                     if t:
                         #pprint.pprint(t.__dict__)
                         nextid = t.refs_chan
-                        if nextid :
-                            
-                            #print ("next %s %s %s" % (fromid, pos, nextid))
-                            
-                            n = gcc_tu_parser.models.FuncParams(
+                        if nextid :                        
+                            #print ("next %s %s %s" % (fromid, pos, nextid))                            
+                            n = mdl(
                                 source_file=fid2,
-                                function_decl=fromid,
-                                param_pos=pos,
-                                function_param=nextid)
+                                starting_node=fromid,
+                                item_pos=pos,
+                                node_type=to_table,
+                                value=nextid)
                             #n.save()
                             queue.append(n)
                     else:
@@ -75,4 +76,4 @@ class Command:
                     gcc_tu_parser.models.FuncParams.objects.bulk_create(queue)
                     queue = []
                      
-            gcc_tu_parser.models.FuncParams.objects.bulk_create(queue)
+            mdl.objects.bulk_create(queue)

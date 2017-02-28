@@ -7,7 +7,8 @@ mkmig:
 sqlmigrate:
 	python3 ./manage.py sqlmigrate --settings=introspector.settings.development gcc_tu_parser 0001_initial
 migrate:
-	python3 ./manage.py migrate --settings=introspector.settings.development gcc_tu_parser 0003_auto_20170222_1009
+	python3 ./manage.py migrate --settings=introspector.settings.development gcc_tu_parser
+
 # 0001_initial
 # 0002_auto_20170222_1008
 # 0003_auto_20170222_1009

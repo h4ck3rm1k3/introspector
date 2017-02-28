@@ -483,30 +483,29 @@ class Node(models.Model):
         })
 
 
-class FuncParams(models.Model):
+class NamedList(models.Model):
     source_file= models.ForeignKey(SourceFile,
                                    blank=True,
                                    null=True,
-                                   #db_column='source_file_n',
                                    on_delete=models.SET_NULL)
-    function_decl  = models.IntegerField(null=False)
-    #source_file_num  = models.IntegerField(null=False)
-    param_pos  = models.IntegerField(null=False)
-    function_param = models.IntegerField(null=False)
-    function = CompositeForeignKey('Node',
-                                   related_name='func_param_header',
-                                   on_delete=models.SET_NULL,
-                                   default='',
-                                   to_fields={
-                                       'source_file':'source_file',
-                                       'node_id':'function_decl',
-                                })
-    parameters = CompositeForeignKey('Node',
-        related_name='func_params',
+    starting_node  = models.IntegerField(null=False)
+    item_pos  = models.IntegerField(null=False)
+    value = models.IntegerField(null=False)
+    node_type = models.CharField(max_length=40)
+    node = CompositeForeignKey('Node',
+                               related_name='list_header_header',
+                               on_delete=models.SET_NULL,
+                               default='',
+                               to_fields={
+                                   'source_file':'source_file',
+                                   'node_id':'starting_node',
+                               })
+    value_node = CompositeForeignKey('Node',
+        related_name='node_in_list',
         on_delete=models.SET_NULL,        default='',
         to_fields={
         'source_file':'source_file',
-        'node_id':'function_param',
+        'node_id':'value',
         })
     class Meta:
-        unique_together = ('source_file', 'function_param','param_pos','function_param')
+        unique_together = ('source_file', 'node_type' , 'starting_node','item_pos','value')
